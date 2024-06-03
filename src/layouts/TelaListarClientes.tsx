@@ -1,59 +1,53 @@
-import { useState, useEffect } from "react";
-import {
-    Alert, Pressable, FlatList, StyleSheet, Text, View, ActivityIndicator, ImageBackground
-} from "react-native";
-
+import React, { useEffect, useState } from "react";
+import { Alert, Pressable, FlatList, StyleSheet, Text, View, ActivityIndicator, ImageBackground } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 import { ListarClientesProps } from "../types";
 import { IClientes } from "../models/IClientes";
 
-export default function ListarClientes({ navigation, route }: ListarClientesProps) {
+const ListarClientes = ({ navigation, route }: ListarClientesProps) => {
     const [clientes, setClientes] = useState<IClientes[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        setIsLoading(true);
-
-        const subscribe = firestore()
-            .collection('clientes')
-            .onSnapshot(querySnapshot => {
-                const data = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })) as IClientes[];
-
+        const carregarClientes = async () => {
+            setIsLoading(true);
+            try {
+                const snapshot = await firestore().collection('clientes').get();
+                const data: IClientes[] = [];
+                snapshot.forEach((doc) => {
+                    const cliente = doc.data() as IClientes;
+                    cliente.id = doc.id;
+                    data.push(cliente);
+                });
                 setClientes(data);
-                setIsLoading(false);
-            }, (error) => {
-                console.error(error);
+            } catch (error) {
+                console.error("Erro ao carregar clientes:", error);
                 Alert.alert("Erro", "Não foi possível carregar os clientes.");
+            } finally {
                 setIsLoading(false);
-            });
+            }
+        };
 
-        return () => subscribe();
+        carregarClientes();
     }, []);
 
-    function deletarCliente(id: string) {
+    const deletarCliente = async (id: string) => {
         setIsLoading(true);
 
-        firestore()
-            .collection('clientes')
-            .doc(id)
-            .delete()
-            .then(() => {
-                Alert.alert("Cliente", "Removido com sucesso");
-            })
-            .catch((error) => {
-                console.error(error);
-                Alert.alert("Erro", "Não foi possível remover o cliente.");
-            })
-            .finally(() => setIsLoading(false));
-    }
+        try {
+            await firestore().collection('clientes').doc(id).delete();
+            Alert.alert("Cliente", "Removido com sucesso");
+        } catch (error) {
+            console.error(error);
+            Alert.alert("Erro", "Não foi possível remover o cliente.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     function alterarCliente(id: string) {
         navigation.navigate("AlterarClientes", { id: id, palavra: '' });
     }
-    
 
     return (
         <ImageBackground
@@ -62,7 +56,6 @@ export default function ListarClientes({ navigation, route }: ListarClientesProp
         >
             <View style={styles.container}>
                 <Text style={styles.title}>Listagem de Clientes</Text>
-
                 {isLoading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
@@ -83,9 +76,6 @@ export default function ListarClientes({ navigation, route }: ListarClientesProp
                                     <Text style={styles.cardDescription}>Estado: {item.endereco.estado}</Text>
                                     {/* Adicione outros campos conforme necessário */}
                                 </View>
-                                <Pressable style={styles.botao_alterar} onPress={() => alterarCliente(item.id)}>
-                                    <Text style={[styles.botaoText, { color: '#4A90E2' }]}>✏️</Text>
-                                </Pressable>
                                 <Pressable style={styles.botao_deletar} onPress={() => deletarCliente(item.id)}>
                                     <Text style={[styles.botaoText, { color: '#E74C3C' }]}>❌</Text>
                                 </Pressable>
@@ -155,18 +145,11 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginLeft: 10,
     },
-    botao_alterar: {
-        backgroundColor: 'transparent',
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginRight: 10,
-    },
     botaoText: {
         fontSize: 24,
         textAlign: 'center', // Centraliza o emoji horizontalmente
         lineHeight: 40, // Centraliza o emoji verticalmente
     },
 });
+
+export default ListarClientes;

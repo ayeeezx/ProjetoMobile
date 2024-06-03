@@ -6,27 +6,25 @@ type RootStackParamList = {
   CadastroUsuario: undefined;
   CadastroCliente: undefined;
   CadastroAtendimento: undefined;
-  CadastroNota: undefined;
   ListarClientes: undefined;
-  ListarAtendimento: undefined;
+  ListarAtendimentos: undefined;
+  RemoverClientes: undefined;
   AlterarClientes: { id: string; palavra: string };
+  AlterarAtendimento: undefined;
 };
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type ScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, T>;
 
-type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
-
-type CadastroUsuarioProps = NativeStackScreenProps<RootStackParamList, 'CadastroUsuario'>;
-
-type ListarClientesProps = NativeStackScreenProps<RootStackParamList, 'ListarClientes'>;
-
-type AlterarClientesProps = NativeStackScreenProps<RootStackParamList, 'AlterarClientes'>;
-
-type CadastroClienteProps = NativeStackScreenProps<RootStackParamList, 'CadastroCliente'>;
-
-type CadastroAtendimentoProps = NativeStackScreenProps<RootStackParamList, 'CadastroAtendimento'>;
-
-type ListarAtendimentoProps = NativeStackScreenProps<RootStackParamList, 'ListarAtendimento'>;
+type HomeProps = ScreenProps<'Home'>;
+type LoginProps = ScreenProps<'Login'>;
+type CadastroUsuarioProps = ScreenProps<'CadastroUsuario'>;
+type ListarClientesProps = ScreenProps<'ListarClientes'>;
+type RemoverClientesProps = ScreenProps<'RemoverClientes'>;
+type AlterarClientesProps = ScreenProps<'AlterarClientes'>;
+type CadastroClienteProps = ScreenProps<'CadastroCliente'>;
+type CadastroAtendimentoProps = ScreenProps<'CadastroAtendimento'>;
+type ListarAtendimentosProps = ScreenProps<'ListarAtendimentos'>;
+type AlterarAtendimentoProps = ScreenProps<'AlterarAtendimento'>;
 
 export type {
   RootStackParamList,
@@ -37,5 +35,7 @@ export type {
   AlterarClientesProps,
   CadastroClienteProps,
   CadastroAtendimentoProps,
-  ListarAtendimentoProps
+  ListarAtendimentosProps,
+  RemoverClientesProps,
+  AlterarAtendimentoProps
 };

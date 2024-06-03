@@ -2,16 +2,10 @@ import React from 'react';
 import { Button, View, StyleSheet } from 'react-native';
 import { HomeProps } from '../types';
 
-export default ({ navigation, route }: HomeProps) => {
+const HomeScreen = ({ navigation, route }: HomeProps) => {
+
   return (
     <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Listar Clientes"
-          color={'#4682B4'}
-          onPress={() => navigation.navigate('ListarClientes')}
-        />
-      </View>
       <View style={styles.buttonContainer}>
         <Button
           title="Cadastrar Cliente"
@@ -21,9 +15,23 @@ export default ({ navigation, route }: HomeProps) => {
       </View>
       <View style={styles.buttonContainer}>
         <Button
+          title="Listar Clientes"
+          color={'#4682B4'}
+          onPress={() => navigation.navigate('ListarClientes')}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
           title="Cadastro Atendimento"
           color={'#4682B4'}
           onPress={() => navigation.navigate('CadastroAtendimento')}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Listar Atendimento"
+          color={'#4682B4'}
+          onPress={() => navigation.navigate('ListarAtendimentos')}
         />
       </View>
     </View>
@@ -43,3 +51,5 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
+export default HomeScreen;

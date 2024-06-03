@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import firestore from "@react-native-firebase/firestore";
 import { IClientes } from "../models/IClientes";
@@ -7,54 +7,47 @@ import { AlterarClientesProps } from "../types";
 import Carregamento from "../outros/Carregamento";
 
 export default function AlterarClientes({ navigation, route }: AlterarClientesProps) {
-    const [id] = useState(route.params.id);
-    const [cliente, setCliente] = useState<IClientes | null>(null);
+    const [clientes, setClientes] = useState<IClientes[]>([]);
+    const [clienteSelecionado, setClienteSelecionado] = useState<IClientes | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const carregarCliente = async () => {
+        const carregarClientes = async () => {
             setIsLoading(true);
             try {
-                const clienteDoc = await firestore()
-                    .collection('clientes')
-                    .doc(id)
-                    .get();
-
-                if (!clienteDoc.exists) {
-                    Alert.alert("Cliente não encontrado", "O cliente que você está tentando alterar não existe.");
-                    navigation.goBack();
-                    return;
-                }
-
-                const clienteData = clienteDoc.data() as IClientes;
-                setCliente(clienteData);
+                const snapshot = await firestore().collection('clientes').get();
+                const data: IClientes[] = [];
+                snapshot.forEach((doc) => {
+                    const cliente = doc.data() as IClientes;
+                    cliente.id = doc.id;
+                    data.push(cliente);
+                });
+                setClientes(data);
             } catch (error) {
-                console.error("Erro ao carregar cliente:", error);
-                Alert.alert("Erro", "Não foi possível carregar os dados do cliente.");
+                console.error("Erro ao carregar clientes:", error);
+                Alert.alert("Erro", "Não foi possível carregar os clientes.");
             } finally {
                 setIsLoading(false);
             }
         };
 
-        carregarCliente();
+        carregarClientes();
     }, []);
 
+    const selecionarCliente = (cliente: IClientes) => {
+        setClienteSelecionado(cliente);
+    };
+
     const alterarCliente = async () => {
-        if (!cliente) return;
+        if (!clienteSelecionado) return;
 
         setIsLoading(true);
 
         try {
             await firestore()
                 .collection('clientes')
-                .doc(id)
-                .update({
-                    nome: cliente.nome,
-                    cpf: cliente.cpf,
-                    endereco: cliente.endereco,
-                    dataNascimento: cliente.dataNascimento,
-                    // Adicione outras propriedades conforme necessário
-                });
+                .doc(clienteSelecionado.id)
+                .update(clienteSelecionado);
 
             Alert.alert("Cliente", "Cliente alterado com sucesso");
             navigation.goBack();
@@ -70,27 +63,35 @@ export default function AlterarClientes({ navigation, route }: AlterarClientesPr
         <View style={styles.container}>
             <Carregamento isLoading={isLoading} />
 
-            {cliente && (
+            <FlatList
+                data={clientes}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <Pressable style={styles.itemContainer} onPress={() => selecionarCliente(item)}>
+                        <Text style={styles.itemText}>{item.nome}</Text>
+                    </Pressable>
+                )}
+            />
+
+            {clienteSelecionado && (
                 <>
                     <Text>Nome</Text>
                     <TextInput
                         style={styles.caixa_texto}
-                        value={cliente.nome}
-                        onChangeText={(text) => setCliente({...cliente, nome: text})} />
+                        value={clienteSelecionado.nome}
+                        onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, nome: text})} />
 
                     <Text>CPF</Text>
                     <TextInput
                         style={styles.caixa_texto}
-                        value={cliente.cpf}
-                        onChangeText={(text) => setCliente({...cliente, cpf: text})} />
+                        value={clienteSelecionado.cpf}
+                        onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, cpf: text})} />
 
-                    <Text>Endereço</Text>
-                    {/* Adicione os campos de endereço conforme necessário */}
                     <Text>Data de Nascimento</Text>
                     <TextInput
                         style={styles.caixa_texto}
-                        value={cliente.dataNascimento}
-                        onChangeText={(text) => setCliente({...cliente, dataNascimento: text})} />
+                        value={clienteSelecionado.dataNascimento}
+                        onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, dataNascimento: text})} />
 
                     <Pressable
                         style={styles.botao}
@@ -109,6 +110,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    itemContainer: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc'
+    },
+    itemText: {
+        fontSize: 18
     },
     caixa_texto: {
         width: '70%',

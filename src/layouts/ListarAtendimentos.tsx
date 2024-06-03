@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    Alert, Pressable, FlatList, StyleSheet, Text, View, ActivityIndicator, ImageBackground
-} from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View, ActivityIndicator, ImageBackground, Pressable } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 
 interface Atendimento {
@@ -37,6 +35,20 @@ export default function ListarAtendimentos({ navigation }: any) {
         return () => subscribe();
     }, []);
 
+    const removerAtendimento = async (id: string) => {
+        try {
+            await firestore().collection('atendimentos').doc(id).delete();
+            Alert.alert("Sucesso", "Atendimento removido com sucesso!");
+        } catch (error) {
+            console.error(error);
+            Alert.alert("Erro", "Não foi possível remover o atendimento.");
+        }
+    };
+
+    const editarAtendimento = (id: string) => {
+        navigation.navigate('TelaAlterarAtendimento', { id });
+    };
+
     return (
         <ImageBackground
             source={{ uri: 'https://example.com/background_image.jpg' }} // Substitua pela URL da imagem de fundo desejada
@@ -44,7 +56,11 @@ export default function ListarAtendimentos({ navigation }: any) {
         >
             <View style={styles.container}>
                 <Text style={styles.title}>Listagem de Atendimentos</Text>
-
+                <Pressable
+                    style={styles.botaoVoltar}
+                    onPress={() => navigation.navigate('Home')}>
+                    <Text style={styles.desc_botaoVoltar}>Voltar</Text>
+                </Pressable>
                 {isLoading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
@@ -59,6 +75,14 @@ export default function ListarAtendimentos({ navigation }: any) {
                                     <Text style={styles.cardDescription}>Data: {item.data}</Text>
                                     <Text style={styles.cardDescription}>Hora: {item.hora}</Text>
                                     <Text style={styles.cardDescription}>Descrição: {item.descricao}</Text>
+                                </View>
+                                <View style={styles.botoes}>
+                                    <Pressable onPress={() => editarAtendimento(item.id)}>
+                                        <Text style={styles.botao}>✏️</Text>
+                                    </Pressable>
+                                    <Pressable onPress={() => removerAtendimento(item.id)}>
+                                        <Text style={styles.botao}>🗑️</Text>
+                                    </Pressable>
                                 </View>
                             </View>
                         )}
@@ -93,6 +117,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 15,
         flexDirection: 'row',
+        justifyContent: 'space-between', // Ajustando o espaçamento entre os itens
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -115,5 +140,23 @@ const styles = StyleSheet.create({
     cardDescription: {
         fontSize: 16,
         color: '#666',
+    },
+    botaoVoltar: {
+        backgroundColor: '#007bff',
+        padding: 10,
+        borderRadius: 5,
+        alignSelf: 'flex-start',
+        marginVertical: 10,
+    },
+    desc_botaoVoltar: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    botoes: {
+        flexDirection: 'row', // Alinhando os botões na horizontal
+    },
+    botao: {
+        fontSize: 24,
+        marginHorizontal: 5,
     },
 });

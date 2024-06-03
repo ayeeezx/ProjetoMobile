@@ -3,6 +3,8 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, View, ImageBackground } 
 import firestore from "@react-native-firebase/firestore";
 import Carregamento from "../outros/Carregamento";
 import CadastroAtendimentoScreen from "../screens/CadastroAtendimentoScreen";
+import ListarAtendimentos from "./ListarAtendimentos";
+
 
 interface Atendimento {
     cliente: string;

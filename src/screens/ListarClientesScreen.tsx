@@ -1,12 +1,11 @@
-import { CadastroNotaProps, CadastroUsuarioProps, ListarNotasProps, LoginProps } from "../types";
-import TelaCadastroUsuario from "../layouts/TelaCadastroUsuario";
-import TelaCadastroNota from "../layouts/TelaCadastroNota";
-import TelaListarNotas from "../layouts/TelaListarClientes";
+import { ListarClientesProps } from "../types";
 
-const ListarNotasScreen = ({ navigation, route }: ListarNotasProps) => {
+import ListarClientes from "../layouts/TelaListarClientes";
+
+const ListarClientesScreen = ({ navigation, route }: ListarClientesProps) => {
     return (
-        <TelaListarNotas navigation={navigation} route={route} />
+        <ListarClientes navigation={navigation} route={route} />
     );
 };
 
-export default ListarNotasScreen;
+export default ListarClientesScreen;
