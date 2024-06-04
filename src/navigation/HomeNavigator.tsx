@@ -8,7 +8,8 @@ import ListarClientesScreen from "../screens/ListarClientesScreen";
 import CadastroClienteScreen from "../screens/CadastroClienteScreen";
 import CadastroAtendimentoScreen from "../screens/CadastroAtendimentoScreen";
 import ListarAtendimentosScreen from "../screens/ListarAtendimentosScreen";
-import AlterarAtendimentoScreen from "../screens/AlterarAtendimentoScreen"; // Assuming this screen exists
+import AlterarAtendimentoScreen from "../screens/AlterarAtendimentoScreen";
+import AlterarClientesScreen from "../screens/AlterarClientesScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,6 +23,9 @@ const HomeNavigator = () => {
             <Stack.Screen name="CadastroCliente" component={CadastroClienteScreen} />
             <Stack.Screen name="CadastroAtendimento" component={CadastroAtendimentoScreen} />
             <Stack.Screen name="ListarAtendimentos" component={ListarAtendimentosScreen} />
+            <Stack.Screen name="AlterarClientes" component={AlterarClientesScreen} />
+            <Stack.Screen name="AlterarAtendimento" component={AlterarAtendimentoScreen} />
+
         </Stack.Navigator>
     );
 };

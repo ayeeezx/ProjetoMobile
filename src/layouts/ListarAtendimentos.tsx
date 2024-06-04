@@ -131,11 +131,13 @@ const styles = StyleSheet.create({
     index: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: 'black',
     },
     cardTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 5,
+        color: 'black',
     },
     cardDescription: {
         fontSize: 16,

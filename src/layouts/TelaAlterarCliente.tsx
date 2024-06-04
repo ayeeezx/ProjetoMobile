@@ -19,7 +19,7 @@ export default function AlterarClientes({ navigation, route }: AlterarClientesPr
                 const data: IClientes[] = [];
                 snapshot.forEach((doc) => {
                     const cliente = doc.data() as IClientes;
-                    cliente.id = doc.id;
+                    cliente.id = doc.id;    
                     data.push(cliente);
                 });
                 setClientes(data);
@@ -75,23 +75,25 @@ export default function AlterarClientes({ navigation, route }: AlterarClientesPr
 
             {clienteSelecionado && (
                 <>
-                    <Text>Nome</Text>
-                    <TextInput
-                        style={styles.caixa_texto}
-                        value={clienteSelecionado.nome}
-                        onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, nome: text})} />
+                    <View style={styles.form}>
+                        <Text style={styles.label}>Nome</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={clienteSelecionado.nome}
+                            onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, nome: text})} />
 
-                    <Text>CPF</Text>
-                    <TextInput
-                        style={styles.caixa_texto}
-                        value={clienteSelecionado.cpf}
-                        onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, cpf: text})} />
+                        <Text style={styles.label}>CPF</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={clienteSelecionado.cpf}
+                            onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, cpf: text})} />
 
-                    <Text>Data de Nascimento</Text>
-                    <TextInput
-                        style={styles.caixa_texto}
-                        value={clienteSelecionado.dataNascimento}
-                        onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, dataNascimento: text})} />
+                        <Text style={styles.label}>Data de Nascimento</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={clienteSelecionado.dataNascimento}
+                            onChangeText={(text) => setClienteSelecionado({...clienteSelecionado, dataNascimento: text})} />
+                    </View>
 
                     <Pressable
                         style={styles.botao}
@@ -109,30 +111,51 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0', // cor de fundo suave para melhor visualização
+    },
+    form: {
+        width: '80%', // largura do formulário
+        alignItems: 'center', // centraliza os itens horizontalmente
     },
     itemContainer: {
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc'
+        borderBottomColor: '#ccc',
+        width: '100%',
     },
     itemText: {
-        fontSize: 18
+        fontSize: 18,
+        color: 'black', // cor do texto preto para melhor visibilidade
     },
-    caixa_texto: {
-        width: '70%',
+    label: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: 10,
+        marginBottom: 5,
+        color: 'black',
+    },
+    input: {
+        width: '100%', // largura do campo de entrada
         color: 'black',
         borderWidth: 1,
         borderRadius: 4,
-        margin: 3
+        marginVertical: 5,
+        paddingHorizontal: 10,
+        backgroundColor: 'white', // fundo branco para melhor contraste
     },
     botao: {
         justifyContent: 'center',
-        backgroundColor: 'green',
+        alignItems: 'center',
+        backgroundColor: '#4682B4',
         paddingVertical: 10,
-        paddingHorizontal: 30
+        paddingHorizontal: 30,
+        borderRadius: 4,
+        marginVertical: 10,
     },
     desc_botao: {
-        fontSize: 20
+        fontSize: 20,
+        color: 'white', // texto branco para melhor visibilidade
     },
 });
+

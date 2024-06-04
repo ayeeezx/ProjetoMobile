@@ -49,6 +49,7 @@ const ListarClientes = ({ navigation, route }: ListarClientesProps) => {
         navigation.navigate("AlterarClientes", { id: id, palavra: '' });
     }
 
+
     return (
         <ImageBackground
             source={{ uri: 'https://wallpapers.com/images/high/phone-valorant-agent-cypher-0x88jswvi32zt96o.webp' }}
@@ -65,7 +66,7 @@ const ListarClientes = ({ navigation, route }: ListarClientesProps) => {
                         renderItem={({ item, index }) => (
                             <View style={styles.card}>
                                 <View style={styles.dados_card}>
-                                    <Text style={styles.index}>{index + 1}</Text>
+                                    <Text style={[styles.index, { color: 'black' }]}>{index + 1}</Text>
                                     <Text style={styles.cardTitle}>{item.nome}</Text>
                                     <Text style={styles.cardDescription}>CPF: {item.cpf}</Text>
                                     <Text style={styles.cardDescription}>Rua: {item.endereco.rua}</Text>
@@ -74,6 +75,9 @@ const ListarClientes = ({ navigation, route }: ListarClientesProps) => {
                                     <Text style={styles.cardDescription}>Complemento: {item.endereco.complemento}</Text>
                                     <Text style={styles.cardDescription}>Cidade: {item.endereco.cidade}</Text>
                                     <Text style={styles.cardDescription}>Estado: {item.endereco.estado}</Text>
+                                    <Pressable style={styles.botao_alterar} onPress={() => alterarCliente(item.id)}>
+                                        <Text style={[styles.botaoText, { color: '#3498db' }]}>✎</Text>
+                                    </Pressable>
                                     {/* Adicione outros campos conforme necessário */}
                                 </View>
                                 <Pressable style={styles.botao_deletar} onPress={() => deletarCliente(item.id)}>
@@ -137,6 +141,15 @@ const styles = StyleSheet.create({
         color: '#666',
     },
     botao_deletar: {
+        backgroundColor: 'transparent',
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+        marginLeft: 10,
+    },
+    botao_alterar: {
         backgroundColor: 'transparent',
         width: 40,
         height: 40,

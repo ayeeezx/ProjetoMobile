@@ -1,11 +1,11 @@
-import { AlterarClientesProps} from "../types";
-import AlterarClientes from "../layouts/TelaAlterarClientes";
-import TelaAlterarClientes from "../layouts/TelaAlterarClientes";
+import React from "react";
+import { AlterarClientesProps } from "../types";
+import AlterarClientes from "../layouts/TelaAlterarCliente";
 
-const AlterarNotaScreen = ({ navigation, route }: AlterarClientesProps) => {
+const AlterarClientesScreen = ({ navigation, route }: AlterarClientesProps) => {
     return (
-        <TelaAlterarClientes navigation={navigation} route={route} />
+        <AlterarClientes navigation={navigation} route={route} />
     );
 };
 
-export default AlterarNotaScreen;
+export default AlterarClientesScreen;

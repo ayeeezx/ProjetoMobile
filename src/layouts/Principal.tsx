@@ -1,54 +1,82 @@
 import React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { Button, View, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
 import { HomeProps } from '../types';
 
 const HomeScreen = ({ navigation, route }: HomeProps) => {
 
   return (
-    <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Cadastrar Cliente"
-          color={'#4682B4'}
-          onPress={() => navigation.navigate('CadastroCliente')}
-        />
+    <ImageBackground
+      source={{ uri: 'https://images.unsplash.com/photo-1562076781-6a61aa1c5b87' }} // Uma imagem de fundo moderna
+      style={styles.background}
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Menu Principal</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('CadastroCliente')}
+          >
+            <Text style={styles.buttonText}>Cadastrar Cliente</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('ListarClientes')}
+          >
+            <Text style={styles.buttonText}>Listar Clientes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('CadastroAtendimento')}
+          >
+            <Text style={styles.buttonText}>Cadastro Atendimento</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('ListarAtendimentos')}
+          >
+            <Text style={styles.buttonText}>Listar Atendimento</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Listar Clientes"
-          color={'#4682B4'}
-          onPress={() => navigation.navigate('ListarClientes')}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Cadastro Atendimento"
-          color={'#4682B4'}
-          onPress={() => navigation.navigate('CadastroAtendimento')}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Listar Atendimento"
-          color={'#4682B4'}
-          onPress={() => navigation.navigate('ListarAtendimentos')}
-        />
-      </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: '#F8F8FF',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparência para destacar o conteúdo
+    padding: 20,
+    width: '100%',
+  },
+  title: {
+    fontSize: 32,
+    color: 'white',
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   buttonContainer: {
+    width: '100%',
+  },
+  button: {
+    backgroundColor: '#4682B4',
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    alignItems: 'center',
     marginVertical: 10,
-    width: '80%',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

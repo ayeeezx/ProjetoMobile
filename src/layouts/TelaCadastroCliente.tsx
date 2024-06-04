@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, TextInput, View, ImageBackground } from "react-native";
-
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import { CadastroClienteProps } from "../types";
 import Carregamento from "../outros/Carregamento";
 
@@ -18,6 +18,7 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
     });
     const [dataNascimento, setDataNascimento] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [cadastroConfirmado, setCadastroConfirmado] = useState(false);
 
     const formatarCPF = (text: string) => {
         let cpfFormatado = text.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
@@ -70,15 +71,21 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
         setIsLoading(true);
 
         if (validarCampos()) {
-            // Lógica para criar o usuário após a validação dos campos
             try {
-                // Simulando uma autenticação bem-sucedida
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                Alert.alert("Conta", "Cadastrado com sucesso");
-                navigation.navigate('Home'); // Redirecionar para a tela principal
+                const cliente = {
+                    nome,
+                    cpf,
+                    endereco,
+                    dataNascimento
+                };
+
+                await firestore().collection('clientes').add(cliente);
+                setCadastroConfirmado(true);
+                Alert.alert("Sucesso", "Cliente cadastrado com sucesso!");
+                navigation.navigate('Home');
             } catch (error) {
-                console.log(error);
-                Alert.alert("Erro", "Ocorreu um erro ao cadastrar o usuário. Por favor, tente novamente.");
+                console.error("Erro ao cadastrar cliente:", error);
+                Alert.alert("Erro", "Ocorreu um erro ao cadastrar o cliente. Por favor, tente novamente.");
             } finally {
                 setIsLoading(false);
             }
@@ -100,7 +107,9 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                     <Text style={styles.label}>Nome</Text>
                     <TextInput
                         style={styles.input}
-                        onChangeText={(text) => setNome(text)} />
+                        onChangeText={(text) => setNome(text)} 
+                        placeholder="Nome Completo"
+                        placeholderTextColor={'black'}/>
 
                     <Text style={styles.label}>CPF</Text>
                     <TextInput
@@ -108,7 +117,8 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                         onChangeText={(text) => handleCPFTyping(text)}
                         value={cpf}
                         maxLength={14} // Limita o campo a 14 caracteres (com pontos e traço)
-
+                        placeholder="Digite seu CPF"
+                        placeholderTextColor={'black'}
                         keyboardType="numeric" />
 
                     <Text style={styles.label}>Endereço</Text>
@@ -116,26 +126,33 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Rua"
-                            onChangeText={(text) => setEndereco({ ...endereco, rua: text })} />
+                            placeholderTextColor={'black'}
+                            onChangeText={(text) => setEndereco({ ...endereco, rua: text })} 
+                            />
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Número"
+                            placeholderTextColor={'black'}
                             onChangeText={(text) => setEndereco({ ...endereco, numero: text })} />
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Bairro"
+                            placeholderTextColor={'black'}
                             onChangeText={(text) => setEndereco({ ...endereco, bairro: text })} />
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Complemento"
+                            placeholderTextColor={'black'}
                             onChangeText={(text) => setEndereco({ ...endereco, complemento: text })} />
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Cidade"
+                            placeholderTextColor={'black'}
                             onChangeText={(text) => setEndereco({ ...endereco, cidade: text })} />
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Estado"
+                            placeholderTextColor={'black'}
                             onChangeText={(text) => setEndereco({ ...endereco, estado: text })} />
                     </View>
 
@@ -143,6 +160,7 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                     <TextInput
                         style={styles.input}
                         placeholder="DD/MM/AAAA"
+                        placeholderTextColor={'black'}
                         onChangeText={(text) => handleDataNascimentoTyping(text)}
                         value={dataNascimento}
                         maxLength={10} // Limita o campo a 10 caracteres (DD/MM/AAAA)
