@@ -16,12 +16,14 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
     const [hora, setHora] = useState<string>('');
     const [descricao, setDescricao] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [mostrarListaClientes, setMostrarListaClientes] = useState<boolean>(false);
 
     useEffect(() => {
         if (cliente.trim()) {
             buscarClientes();
         } else {
             setClientesEncontrados([]);
+            setMostrarListaClientes(false);
         }
     }, [cliente]);
 
@@ -37,6 +39,7 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
                 clientes.push({ id: doc.id, nome: data.nome });
             });
             setClientesEncontrados(clientes);
+            setMostrarListaClientes(clientes.length > 0); // Mostrar lista apenas se houver clientes encontrados
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
             setClientesEncontrados([]);
@@ -45,14 +48,15 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
 
     const selecionarCliente = (nome: string): void => {
         setCliente(nome);
-        setClientesEncontrados([]);
+        setClientesEncontrados([]); 
+        setMostrarListaClientes(false); 
     };
 
     const formatarData = (text: string): string => {
-        let dataFormatada = text.replace(/\D/g, ''); 
-        dataFormatada = dataFormatada.slice(0, 8); 
-        dataFormatada = dataFormatada.replace(/(\d{2})(\d{1,2})/, '$1/$2'); 
-        dataFormatada = dataFormatada.replace(/(\d{2})(\d{4})/, '$1/$2'); 
+        let dataFormatada = text.replace(/\D/g, '');
+        dataFormatada = dataFormatada.slice(0, 8);
+        dataFormatada = dataFormatada.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+        dataFormatada = dataFormatada.replace(/(\d{2})(\d{4})/, '$1/$2');
         return dataFormatada;
     };
 
@@ -116,26 +120,19 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
                         onChangeText={(text) => setCliente(text)}
                         value={cliente}
                     />
-                    {clientesEncontrados.map((cliente, index) => (
-                        <Pressable
-                            key={index}
-                            style={styles.clienteEncontrado}
-                            onPress={() => selecionarCliente(cliente.nome)}
-                        >
-                            <Text>{cliente.nome}</Text>
-                        </Pressable>
-                    ))}
-                    {cliente && (
-                        <Pressable
-                            style={styles.clearButton}
-                            onPress={() => {
-                                setCliente('');
-                                setClientesEncontrados([]);
-                            }}
-                        >
-                            <Text style={styles.clearButtonText}>×</Text>
-                        </Pressable>
-                    )}
+                    {mostrarListaClientes && // Renderizar lista somente se mostrarListaClientes for true
+                        clientesEncontrados.map((cliente, index) => (
+                            <Pressable
+                            
+                                key={index}
+                                style={styles.clienteEncontrado}
+                                onPress={() => selecionarCliente(cliente.nome)}
+                            >
+                                <Text>{cliente.nome}</Text>
+                            </Pressable>
+                        ))
+                    }
+
                     <Text style={styles.label}>Data</Text>
                     <TextInput
                         style={styles.input}
@@ -175,6 +172,7 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
         </ImageBackground>
     );
 }
+
 
 const styles = StyleSheet.create({
     background: {
@@ -218,7 +216,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     clienteEncontrado: {
-        backgroundColor: 'lightgray',
+        backgroundColor: '#87CEFA',
         padding: 10,
         marginVertical: 5,
         borderRadius: 4,

@@ -1,6 +1,6 @@
 import React from "react";
 import { AlterarClientesProps } from "../types";
-import AlterarClientes from "../layouts/TelaAlterarCliente";
+import AlterarClientes from "../layouts/TelaAlterarClientes";
 
 const AlterarClientesScreen = ({ navigation, route }: AlterarClientesProps) => {
     return (

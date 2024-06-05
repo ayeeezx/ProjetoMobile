@@ -1,15 +1,19 @@
 import React from 'react';
-import { Button, View, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { HomeProps } from '../types';
 
-const HomeScreen = ({ navigation, route }: HomeProps) => {
+const HomeScreen = ({ navigation }: HomeProps) => {
 
   return (
     <ImageBackground
-      source={{ uri: 'https://images.unsplash.com/photo-1562076781-6a61aa1c5b87' }} // Uma imagem de fundo moderna
+      source={{ uri: 'https://images.unsplash.com/photo-1519681393784-d120267933ba' }} // Imagem de fundo impactante
       style={styles.background}
     >
-      <View style={styles.overlay}>
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0.6)', 'rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.6)']}
+        style={styles.overlay}
+      >
         <Text style={styles.title}>Menu Principal</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -37,7 +41,7 @@ const HomeScreen = ({ navigation, route }: HomeProps) => {
             <Text style={styles.buttonText}>Listar Atendimento</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
     </ImageBackground>
   );
 }
@@ -52,31 +56,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparência para destacar o conteúdo
-    padding: 20,
     width: '100%',
+    padding: 20,
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     color: 'white',
     fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily: 'sans-serif-condensed', // Fonte personalizada
   },
   buttonContainer: {
     width: '100%',
   },
   button: {
-    backgroundColor: '#4682B4',
-    paddingVertical: 15,
+    backgroundColor: '#87CEEB',
+    paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 10,
     alignItems: 'center',
     marginVertical: 10,
+    elevation: 3, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontFamily: 'sans-serif-light', // Fonte estilizada
   },
 });
 

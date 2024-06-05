@@ -10,23 +10,31 @@ export default ({ navigation, route }: LoginProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     function logar() {
-        if (email && senha) {
-            setIsLoading(true);
-
-            auth()
-                .signInWithEmailAndPassword(email, senha)
-                .then(() => { navigation.navigate('Home') })
-                .catch((error) => console.log(error))
-                .finally(() => setIsLoading(false))
+        if (!email || !senha) {
+            Alert.alert("Campos vazios", "Por favor, preencha o email e a senha antes de continuar.");
+            return;
         }
+
+        setIsLoading(true);
+
+        auth()
+            .signInWithEmailAndPassword(email, senha)
+            .then(() => { navigation.navigate('Home') })
+            .catch((error) => console.log(error))
+            .finally(() => setIsLoading(false))
     }
 
     function redefinirSenha() {
-        auth()
-            .sendPasswordResetEmail(email)
-            .then(() => Alert.alert("Redefinir senha", "Enviamos um email para você"))
-            .catch((error) => console.log(error))
+        if (email) {
+            auth()
+                .sendPasswordResetEmail(email)
+                .then(() => Alert.alert("Redefinir senha", "Enviamos um email para você"))
+                .catch((error) => console.log(error))
+        } else {
+            Alert.alert("Campo de e-mail vazio", "Por favor, digite um e-mail válido antes de redefinir a senha.");
+        }
     }
+
     return (
         <ImageBackground
             source={{ uri: 'https://i.pinimg.com/originals/e8/86/4b/e8864bcd4ceaa608f9632ba0aa22af25.jpg' }}
@@ -91,12 +99,13 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)', // Fundo semitransparente para melhor legibilidade
+        backgroundColor: 'rgba(0,0,0,0.5)', 
         justifyContent: 'center',
     },
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: -15, 
+        marginVertical: -80,
     },
     logo: {
         width: 180,
@@ -106,10 +115,14 @@ const styles = StyleSheet.create({
     container_login: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 100, // Adicionado para mover a seção de login para baixo
+        paddingBottom: 100, 
+        marginTop: 100,
     },
     container_botoes: {
-        height: 100,
+        position: 'absolute',
+        bottom: 20, 
+        left: 0,
+        right: 0,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -120,7 +133,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         margin: 3,
-        backgroundColor: 'white', // Manter fundo branco para legibilidade
+        backgroundColor: 'white', 
         paddingHorizontal: 10,
     },
     botao: {
@@ -128,13 +141,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#4682B4',
         paddingVertical: 10,
         paddingHorizontal: 30,
+        marginHorizontal: 10, 
     },
     desc_botao: {
         fontSize: 20,
-        color: 'white', // Manter texto do botão branco
+        color: 'white', 
     },
     label: {
-        fontSize: 24, // Tamanho da fonte aumentado para melhor legibilidade
+        fontSize: 24, 
         color: 'white',
         marginVertical: 5,
     }
