@@ -78,10 +78,9 @@ export default function ListarAtendimentos({ navigation }: any) {
                                 </View>
                                 <View style={styles.botoes}>
                                     <Pressable onPress={() => editarAtendimento(item.id)}>
-                                        <Text style={styles.botao}>✏️</Text>
                                     </Pressable>
                                     <Pressable onPress={() => removerAtendimento(item.id)}>
-                                        <Text style={styles.botao}>🗑️</Text>
+                                        <Text style={styles.botao}>❌</Text>
                                     </Pressable>
                                 </View>
                             </View>

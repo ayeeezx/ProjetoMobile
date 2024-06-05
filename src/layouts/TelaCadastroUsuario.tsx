@@ -23,11 +23,15 @@ const CadastroUsuario: React.FC<CadastroUsuarioProps> = ({ navigation, route }) 
                 })
                 .catch((error) => {
                     console.log(error);
-                    Alert.alert("Erro", String(error));
+                    Alert.alert("Erro", "Ocorreu um erro ao cadastrar a conta. Por favor, tente novamente.");
                 })
                 .finally(() => { setIsLoading(false) });
-        } else setIsLoading(false);
+        } else {
+            Alert.alert("Campos vazios", "Por favor, preencha o email e a senha antes de continuar.");
+            setIsLoading(false);
+        }
     }
+
 
     return (
         <ImageBackground
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 100, 
+        marginTop: 100,
     },
     caixa_texto: {
         width: '70%',
@@ -88,26 +92,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         margin: 3,
-        backgroundColor: 'white', 
+        backgroundColor: 'white',
         paddingHorizontal: 10,
     },
     botao: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#4682B4', 
+        backgroundColor: '#4682B4',
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 4,
-        marginTop: 20, 
+        marginTop: 20,
     },
     desc_botao: {
         fontSize: 20,
-        color: 'white', 
+        color: 'white',
     },
     label: {
-        fontSize: 25, 
+        fontSize: 25,
         color: 'white',
-        marginVertical: 15, 
+        marginVertical: 15,
     },
     botaoVoltar: {
         position: 'absolute',

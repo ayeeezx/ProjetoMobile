@@ -99,6 +99,8 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
             });
             setIsLoading(false);
             Alert.alert('Atendimento cadastrado com sucesso.');
+            // Redirecionar para a tela principal após cadastrar o atendimento
+            navigation.navigate('Home');
         } catch (error) {
             console.error("Erro ao cadastrar atendimento:", error);
             setIsLoading(false);
@@ -113,6 +115,7 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
         >
             <ScrollView contentContainerStyle={styles.container}>
                 <Carregamento isLoading={isLoading} />
+                
                 <View style={styles.form}>
                     <Text style={styles.label}>Cliente</Text>
                     <TextInput
@@ -123,7 +126,6 @@ const CadastroAtendimento: React.FC<{ navigation: any }> = ({ navigation }) => {
                     {mostrarListaClientes && // Renderizar lista somente se mostrarListaClientes for true
                         clientesEncontrados.map((cliente, index) => (
                             <Pressable
-                            
                                 key={index}
                                 style={styles.clienteEncontrado}
                                 onPress={() => selecionarCliente(cliente.nome)}

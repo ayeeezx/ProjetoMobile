@@ -107,9 +107,9 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                     <Text style={styles.label}>Nome</Text>
                     <TextInput
                         style={styles.input}
-                        onChangeText={(text) => setNome(text)} 
+                        onChangeText={(text) => setNome(text)}
                         placeholder="Nome Completo"
-                        placeholderTextColor={'black'}/>
+                        placeholderTextColor={'black'} />
 
                     <Text style={styles.label}>CPF</Text>
                     <TextInput
@@ -121,19 +121,27 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                         placeholderTextColor={'black'}
                         keyboardType="numeric" />
 
+
                     <Text style={styles.label}>Endereço</Text>
                     <View style={styles.enderecoContainer}>
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Rua"
                             placeholderTextColor={'black'}
-                            onChangeText={(text) => setEndereco({ ...endereco, rua: text })} 
-                            />
+                            onChangeText={(text) => setEndereco({ ...endereco, rua: text })}
+                        />
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Número"
                             placeholderTextColor={'black'}
-                            onChangeText={(text) => setEndereco({ ...endereco, numero: text })} />
+                            onChangeText={(text) => {
+                                // Apenas permite a entrada de números
+                                const numero = text.replace(/[^0-9]/g, '');
+                                setEndereco({ ...endereco, numero });
+                            }}
+                            keyboardType="numeric"
+                        />
+
                         <TextInput
                             style={[styles.input, styles.enderecoInput]}
                             placeholder="Bairro"
@@ -163,8 +171,8 @@ export default function CadastroCliente({ navigation, route }: CadastroClientePr
                         placeholderTextColor={'black'}
                         onChangeText={(text) => handleDataNascimentoTyping(text)}
                         value={dataNascimento}
-                        maxLength={10} // Limita o campo a 10 caracteres (DD/MM/AAAA)
-                        keyboardType="numeric" />
+                        maxLength={10} // Limita o campo a 10 caracteres (DD
+                    />
                 </View>
 
                 <Pressable
